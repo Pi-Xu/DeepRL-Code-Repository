@@ -7,11 +7,11 @@ python run_hw2.py --env_name CartPole-v0 -n 100 -b 5000 -rtg -dsa --exp_name q1_
 python run_hw2.py --env_name CartPole-v0 -n 100 -b 5000 -rtg --exp_name q1_lb_rtg_na
 
 # q2
-for b in 1000, 1500, 2000, 2500, 3000; do 
+for b in 1000 1500 2000 2500 3000; do 
     python run_hw2.py --env_name InvertedPendulum-v2 --ep_len 1000 --discount 0.9 -n 100 -l 2 -s 64 -b $b -lr 5e-3 -rtg --exp_name q2_b_$b
 done
 
-for lr in 0.005 0.01 0.02 0.03 0.04 0.05 do
+for lr in 0.005 0.01 0.02 0.03 0.04 0.05; do
     python run_hw2.py --env_name InvertedPendulum-v2 --ep_len 1000 --discount 0.9 -n 100 -l 2 -s 64 -b 1000 -lr $lr -rtg --exp_name q2_lr_$lr
 done
 
