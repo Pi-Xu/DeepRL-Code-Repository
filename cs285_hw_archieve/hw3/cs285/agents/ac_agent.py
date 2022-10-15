@@ -41,11 +41,12 @@ class ACAgent(BaseAgent):
         #     update the actor
 
         loss = OrderedDict()
-        loss['Critic_Loss'] = self.critic.update(ob_no, ac_na, next_ob_no, re_n,  terminal_n)
+        for _ in range(self.agent_params['num_critic_updates_per_agent_update']):
+            loss['Critic_Loss'] = self.critic.update(ob_no, ac_na, next_ob_no, re_n,  terminal_n)
 
         adv_n = self.estimate_advantage(ob_no, next_ob_no, re_n, terminal_n)
-
-        loss['Actor_Loss'] = self.actor.update(ob_no, ac_na, adv_n)
+        for _ in range(self.agent_params['num_actor_updates_per_agent_update']):
+            loss['Actor_Loss'] = self.actor.update(ob_no, ac_na, adv_n)
 
         return loss
 
