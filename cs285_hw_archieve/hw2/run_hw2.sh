@@ -23,7 +23,11 @@ for b in 10000 30000 50000; do
     done
 done
 
-# TODO: find optimal b r
+# TODO: find optimal b=50000 r=0.01
+python run_hw2.py --env_name HalfCheetah-v2 --ep_len 150 --discount 0.95 -n 100 -l 2 -s 32 -b 50000 -lr 0.01 --exp_name q4_b50000_r0.01
+python run_hw2.py --env_name HalfCheetah-v2 --ep_len 150 --discount 0.95 -n 100 -l 2 -s 32 -b 50000 -lr 0.01 -rtg --exp_name q4_b50000_r0.01_rtg
+python run_hw2.py --env_name HalfCheetah-v2 --ep_len 150 --discount 0.95 -n 100 -l 2 -s 32 -b 50000 -lr 0.01 --nn_baseline --exp_name q4_b50000_r0.01_nnbaseline
+python run_hw2.py --env_name HalfCheetah-v2 --ep_len 150 --discount 0.95 -n 100 -l 2 -s 32 -b 50000 -lr 0.01 -rtg --nn_baseline --exp_name q4_b50000_r0.01_rtg_nnbaseline
 
 # q5
 for gae_lambda in 0 0.95 0.99 1; do
