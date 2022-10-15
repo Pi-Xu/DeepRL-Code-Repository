@@ -91,24 +91,24 @@ class BootstrappedContinuousCritic(nn.Module, BaseCritic):
         ob_no = ptu.from_numpy(ob_no)
         # ac_na = ptu.from_numpy(ac_na)
         next_ob_no = ptu.from_numpy(next_ob_no)
-        reward_n = ptu.from_numpy(reward_n).unsqueeze(0)
+        reward_n = ptu.from_numpy(reward_n)# .unsqueeze(0)
         terminal_n = ptu.from_numpy(terminal_n).bool()
 
-        for i in range(self.num_target_updates):
-            v_tp1 = self.critic_network(next_ob_no)
-            v_tp1 = v_tp1.squeeze()
-            v_tp1 [terminal_n == 1] = 0
+        for i in range(self.num_grad_steps_per_target_update * self.num_target_updates):
+            if i % self.num_grad_steps_per_target_update == 0:
+                v_tp1 = self.critic_network(next_ob_no)
+                v_tp1 = v_tp1.squeeze()
+                v_tp1 [terminal_n == 1] = 0
 
-            with torch.no_grad():
-                targets = reward_n+self.gamma * v_tp1
+                with torch.no_grad(): # compute without gradient
+                    targets = reward_n+self.gamma * v_tp1
 
+            v_t = self.forward(ob_no)
+            self.optimizer.zero_grad()
+            loss = self.loss(v_t, targets)
+            loss.backward()
 
-            for _ in range(self.num_grad_steps_per_target_update):
-                v_t = self.critic_network(ob_no)
-                loss = self.loss(v_t, targets)
+            self.optimizer.step()
 
-                self.optimizer.zero_grad()
-                loss.backward()
-                self.optimizer.step()
 
         return loss.item()
